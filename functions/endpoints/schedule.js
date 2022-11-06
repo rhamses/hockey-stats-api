@@ -37,18 +37,19 @@ function getTeam(games) {
 
 function formatGames(data) {
   const { dates } = data;
-  const schedule = [];
+  let schedule = [];
   for (const dt of dates) {
     const { games } = dt;
-    schedule.push(getTeam(games));
+    schedule = schedule.concat(getTeam(games));
   }
   return schedule;
 }
 
 app.get("/", async (req, res) => {
   try {
-    const { startDate, endDate } = req.query;
+    const { startDate, endDate, league } = req.query;
     const params = { startDate, endDate };
+    if (!league) throw new Error("League required");
     if (!startDate && !endDate)
       throw new Error("startDate and EndDate required");
 
